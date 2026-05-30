@@ -3,6 +3,7 @@
 /// More dartdocs go here.
 library;
 
+export 'src/flags.dart';
 export 'src/flutter_createx_base.dart';
 export 'src/wizard.dart';
 
