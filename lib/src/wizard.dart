@@ -52,28 +52,178 @@ class FlutterCreateWizard {
     return input.isEmpty ? defaultValue : input;
   }
 
-  String _choose(String prompt, List<String> options) {
+  // Arrow keys + enter — returns first word of selected option.
+  String _selectOne(String prompt, List<String> options) {
     console.setForegroundColor(ConsoleColor.white);
     console.writeLine('  › $prompt');
     console.resetColorAttributes();
-    for (var i = 0; i < options.length; i++) {
-      console.setForegroundColor(ConsoleColor.brightBlack);
-      stdout.write('    ${i + 1}) ');
-      console.resetColorAttributes();
-      console.writeLine(options[i]);
+    console.setForegroundColor(ConsoleColor.brightBlack);
+    console.writeLine('  ↑↓ navigate   enter select');
+    console.resetColorAttributes();
+
+    var cursor = 0;
+
+    void render() {
+      for (var i = 0; i < options.length; i++) {
+        stdout.write('\r');
+        console.eraseLine();
+        if (i == cursor) {
+          console.setForegroundColor(ConsoleColor.cyan);
+          stdout.write('    ● ${options[i]}');
+        } else {
+          console.setForegroundColor(ConsoleColor.brightBlack);
+          stdout.write('    ○ ${options[i]}');
+        }
+        console.resetColorAttributes();
+        stdout.write('\n');
+      }
     }
-    stdout.write('  → choice [1-${options.length}]: ');
-    final input = stdin.readLineSync()?.trim() ?? '1';
-    final index = (int.tryParse(input) ?? 1) - 1;
-    return options[index.clamp(0, options.length - 1)].split(' ').first;
+
+    void moveToFirstOption() {
+      for (var i = 0; i < options.length; i++) {
+        stdout.write('\x1b[1A');
+      }
+    }
+
+    console.hideCursor();
+    render();
+
+    while (true) {
+      final key = console.readKey();
+      if (!key.isControl) continue;
+
+      switch (key.controlChar) {
+        case ControlCharacter.arrowUp:
+          cursor = (cursor - 1 + options.length) % options.length;
+          moveToFirstOption();
+          render();
+        case ControlCharacter.arrowDown:
+          cursor = (cursor + 1) % options.length;
+          moveToFirstOption();
+          render();
+        case ControlCharacter.enter:
+          console.showCursor();
+          final label = options[cursor].split(' ').first;
+          moveToFirstOption();
+          stdout.write('\r');
+          console.eraseCursorToEnd();
+          console.setForegroundColor(ConsoleColor.green);
+          stdout.write('  ✓ $label\n');
+          console.resetColorAttributes();
+          return label;
+        case ControlCharacter.ctrlC:
+          console.showCursor();
+          exit(0);
+        default:
+          break;
+      }
+    }
   }
 
-  bool _yesNo(String prompt, bool defaultValue) {
-    final hint = defaultValue ? 'Y/n' : 'y/N';
-    stdout.write('  › $prompt [$hint]: ');
-    final input = stdin.readLineSync()?.trim().toLowerCase() ?? '';
-    if (input.isEmpty) return defaultValue;
-    return input.startsWith('y');
+  // Arrow keys + space toggle + enter — returns sorted list of selected indices.
+  List<int> _selectMany(
+    String prompt,
+    List<String> options,
+    List<int> defaultSelected,
+  ) {
+    console.setForegroundColor(ConsoleColor.white);
+    console.writeLine('  › $prompt');
+    console.resetColorAttributes();
+    console.setForegroundColor(ConsoleColor.brightBlack);
+    console.writeLine('  ↑↓ navigate   space toggle   enter confirm');
+    console.resetColorAttributes();
+
+    var cursor = 0;
+    final selected = <int>{...defaultSelected};
+
+    void render() {
+      for (var i = 0; i < options.length; i++) {
+        stdout.write('\r');
+        console.eraseLine();
+        final isCursor = i == cursor;
+        final isSelected = selected.contains(i);
+
+        if (isCursor) {
+          console.setForegroundColor(ConsoleColor.cyan);
+          stdout.write('    ❯ ');
+        } else {
+          console.setForegroundColor(ConsoleColor.brightBlack);
+          stdout.write('      ');
+        }
+
+        if (isSelected) {
+          console.setForegroundColor(ConsoleColor.green);
+          stdout.write('■ ');
+        } else {
+          console.setForegroundColor(ConsoleColor.brightBlack);
+          stdout.write('□ ');
+        }
+
+        if (isCursor) {
+          console.setForegroundColor(ConsoleColor.white);
+        } else {
+          console.setForegroundColor(ConsoleColor.brightBlack);
+        }
+        stdout.write(options[i]);
+        console.resetColorAttributes();
+        stdout.write('\n');
+      }
+    }
+
+    void moveToFirstOption() {
+      for (var i = 0; i < options.length; i++) {
+        stdout.write('\x1b[1A');
+      }
+    }
+
+    console.hideCursor();
+    render();
+
+    while (true) {
+      final key = console.readKey();
+
+      if (!key.isControl && key.char == ' ') {
+        if (selected.contains(cursor)) {
+          selected.remove(cursor);
+        } else {
+          selected.add(cursor);
+        }
+        moveToFirstOption();
+        render();
+        continue;
+      }
+
+      if (!key.isControl) continue;
+
+      switch (key.controlChar) {
+        case ControlCharacter.arrowUp:
+          cursor = (cursor - 1 + options.length) % options.length;
+          moveToFirstOption();
+          render();
+        case ControlCharacter.arrowDown:
+          cursor = (cursor + 1) % options.length;
+          moveToFirstOption();
+          render();
+        case ControlCharacter.enter:
+          console.showCursor();
+          final result = selected.toList()..sort();
+          final summary = result.isEmpty
+              ? 'none'
+              : result.map((i) => options[i].split(' ').first).join(', ');
+          moveToFirstOption();
+          stdout.write('\r');
+          console.eraseCursorToEnd();
+          console.setForegroundColor(ConsoleColor.green);
+          stdout.write('  ✓ $summary\n');
+          console.resetColorAttributes();
+          return result;
+        case ControlCharacter.ctrlC:
+          console.showCursor();
+          exit(0);
+        default:
+          break;
+      }
+    }
   }
 
   // ── Sections ─────────────────────────────────────────────────────────────
@@ -88,7 +238,7 @@ class FlutterCreateWizard {
 
   Future<void> _sectionTemplate() async {
     _printSection('Template');
-    config.template = _choose('Project template', [
+    config.template = _selectOne('Project template', [
       'app        — full Flutter application (default)',
       'module     — embed into existing native app',
       'package    — reusable Dart/Flutter library',
@@ -100,20 +250,18 @@ class FlutterCreateWizard {
 
   Future<void> _sectionPlatforms() async {
     _printSection('Platforms');
-    final all = ['android', 'ios', 'web', 'linux', 'macos', 'windows'];
-    config.platforms = all.where((p) {
-      final def = ['android', 'ios'].contains(p);
-      return _yesNo('Include $p?', def);
-    }).toList();
+    const all = ['android', 'ios', 'web', 'linux', 'macos', 'windows'];
+    final indices = _selectMany('Platforms', all, [0, 1]);
+    config.platforms = indices.map((i) => all[i]).toList();
   }
 
   Future<void> _sectionLanguages() async {
     _printSection('Languages');
-    config.androidLanguage = _choose('Android language', [
+    config.androidLanguage = _selectOne('Android language', [
       'kotlin (recommended)',
       'java',
     ]);
-    config.iosLanguage = _choose('iOS language', [
+    config.iosLanguage = _selectOne('iOS language', [
       'swift (recommended)',
       'objc',
     ]);
@@ -121,13 +269,23 @@ class FlutterCreateWizard {
 
   Future<void> _sectionOptions() async {
     _printSection('Options');
-    config.empty = _yesNo('Empty project? (no sample code)', config.empty);
-    config.overwrite = _yesNo(
-      'Overwrite if directory exists?',
-      config.overwrite,
-    );
-    config.offline = _yesNo('Force offline (cached packages)?', config.offline);
-    config.noPub = _yesNo('Skip flutter pub get?', config.noPub);
+    const displays = [
+      'empty     — no sample code',
+      'overwrite — if directory exists',
+      'offline   — use cached packages',
+      'noPub     — skip flutter pub get',
+    ];
+    final defaults = <int>[
+      if (config.empty) 0,
+      if (config.overwrite) 1,
+      if (config.offline) 2,
+      if (config.noPub) 3,
+    ];
+    final selected = _selectMany('Project options', displays, defaults);
+    config.empty = selected.contains(0);
+    config.overwrite = selected.contains(1);
+    config.offline = selected.contains(2);
+    config.noPub = selected.contains(3);
   }
 
   // ── Preview ───────────────────────────────────────────────────────────────
@@ -168,7 +326,6 @@ class FlutterCreateWizard {
     console.resetColorAttributes();
     console.writeLine('');
 
-    // Detect flutter executable
     final flutterBin = await _resolveFlutter();
 
     final result = await Process.run(flutterBin, [
