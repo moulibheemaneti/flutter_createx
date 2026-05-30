@@ -4,10 +4,22 @@ import 'package:dart_console/dart_console.dart';
 
 import 'flags.dart';
 
+/// Interactive terminal wizard that guides the user through every
+/// `flutter create` option and executes the resulting command.
+///
+/// Uses arrow-key navigation for single-select and multi-select prompts,
+/// then shows a preview of the generated command before asking for
+/// confirmation.
+///
+/// ```dart
+/// await FlutterCreateWizard().run();
+/// ```
 class FlutterCreateWizard {
   final console = Console();
   final config = FlutterCreateConfig();
 
+  /// Runs the full wizard: clears the screen, steps through each section,
+  /// displays a command preview, and executes `flutter create` on confirmation.
   Future<void> run() async {
     console.clearScreen();
     _printHeader();
