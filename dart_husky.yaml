@@ -1,0 +1,23 @@
+dart_husky:
+  verbose: true
+  staged_only: true
+
+pre-commit:
+  commands:
+    format:
+      run: dart format --set-exit-if-changed .
+      staged_only: false
+      glob: '**/*.dart'
+    analyze:
+      run: dart analyze
+      glob: '**/*.dart'
+    test:
+      run: dart test
+      staged_only: false
+
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional
+      types:
+        append: [wip, release]
