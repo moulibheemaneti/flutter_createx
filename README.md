@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/moulibheemaneti/flutter_createx/main/.github/assets/logo.png" alt="flutter_createx" width="80" />
+<img src="https://raw.githubusercontent.com/moulibheemaneti/flutter_createx/main/doc/assets/logo.png" alt="flutter_createx" width="80" />
 
 # flutter_createx
 
@@ -9,7 +9,7 @@
 [![pub version](https://img.shields.io/pub/v/flutter_createx.svg?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/flutter_createx)
 [![pub points](https://img.shields.io/pub/points/flutter_createx?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/flutter_createx/score)
 [![license](https://img.shields.io/badge/license-MIT-0175C2?style=flat-square&labelColor=1a1a2e)](LICENSE)
-[![dart](https://img.shields.io/badge/dart-%3E%3D3.12.0-0175C2?style=flat-square&labelColor=1a1a2e)](https://dart.dev)
+[![dart](https://img.shields.io/badge/dart-%3E%3D3.0.0-0175C2?style=flat-square&labelColor=1a1a2e)](https://dart.dev)
 
 No flags to memorise. No docs to look up.  
 Just run `flutter createx` and walk through every option interactively.

@@ -1,10 +1,25 @@
 name: flutter_createx
-description: An interactive terminal wizard for flutter create. Browse and configure all flags visually, then execute with approval.
+description: >-
+  A terminal wizard for `flutter create` — browse and configure all flags
+  interactively, preview the full command, then execute with one keystroke.
 version: 1.0.0
 repository: https://github.com/moulibheemaneti/flutter_createx
+homepage: https://github.com/moulibheemaneti/flutter_createx
+issue_tracker: https://github.com/moulibheemaneti/flutter_createx/issues
+
+topics:
+  - cli
+  - flutter
+  - developer-tools
+  - terminal
+  - scaffolding
+
+screenshots:
+  - description: flutter_createx interactive terminal wizard
+    path: doc/assets/logo.png
 
 environment:
-  sdk: ^3.12.0
+  sdk: ">=3.0.0 <4.0.0"
 
 # Add regular dependencies here.
 dependencies:
