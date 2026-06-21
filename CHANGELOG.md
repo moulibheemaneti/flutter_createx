@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0](https://github.com/moulibheemaneti/flutter_createx/compare/flutter_createx-v1.0.1...flutter_createx-v1.1.0) (2026-06-21)
+
+### CI
+
+* automate releases and dependency updates ([2e66768](https://github.com/moulibheemaneti/flutter_createx/commit/2e66768dde9712592bbd48ee1a6d97338094f809))
+
 ## [1.0.1] - 2026-06-06
 
 ### Changed
@@ -34,4 +40,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added GitHub Actions workflow (`pr_title.yml`) to enforce conventional commits rules on PR titles.
   - Configured Dependabot (`dependabot.yml`) for automated daily dependency upgrades.
   - Added MIT License and clean conventional commits guidelines for contributions.
-

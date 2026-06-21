@@ -2,7 +2,7 @@ name: flutter_createx
 description: >-
   A terminal wizard for `flutter create` — browse and configure all flags
   interactively, preview the full command, then execute with one keystroke.
-version: 1.0.1
+version: 1.1.0
 repository: https://github.com/moulibheemaneti/flutter_createx
 homepage: https://github.com/moulibheemaneti/flutter_createx
 issue_tracker: https://github.com/moulibheemaneti/flutter_createx/issues
