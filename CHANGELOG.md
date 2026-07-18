@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2](https://github.com/moulibheemaneti/flutter_createx/compare/flutter_createx-v1.2.1...flutter_createx-v1.2.2) (2026-07-18)
+
+
+### Bug Fixes
+
+* **ci:** update renovate github action to v46.1.19 ([#10](https://github.com/moulibheemaneti/flutter_createx/issues/10)) ([be47c74](https://github.com/moulibheemaneti/flutter_createx/commit/be47c74f9f716ab518070dec93ccea55c32be4f4))
+
 ## [1.2.1](https://github.com/moulibheemaneti/flutter_createx/compare/flutter_createx-v1.2.0...flutter_createx-v1.3.0) (2026-07-14)
 
 ### Features
