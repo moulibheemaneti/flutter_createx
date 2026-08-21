@@ -340,23 +340,26 @@ class FlutterCreateWizard {
 
     final flutterBin = await _resolveFlutter();
 
-    final result = await Process.run(flutterBin, [
-      'create',
-      '--project-name=${config.projectName}',
-      '--org=${config.org}',
-      '--description=${config.description}',
-      '--template=${config.template}',
-      '--platforms=${config.platforms.join(',')}',
-      '-a',
-      config.androidLanguage,
-      '-i',
-      config.iosLanguage,
-      if (config.empty) '--empty',
-      if (config.overwrite) '--overwrite',
-      if (config.offline) '--offline',
-      if (config.noPub) '--no-pub',
-      '${config.outputDir}/${config.projectName}',
-    ], runInShell: true);
+    final result = await Process.run(
+        flutterBin,
+        [
+          'create',
+          '--project-name=${config.projectName}',
+          '--org=${config.org}',
+          '--description=${config.description}',
+          '--template=${config.template}',
+          '--platforms=${config.platforms.join(',')}',
+          '-a',
+          config.androidLanguage,
+          '-i',
+          config.iosLanguage,
+          if (config.empty) '--empty',
+          if (config.overwrite) '--overwrite',
+          if (config.offline) '--offline',
+          if (config.noPub) '--no-pub',
+          '${config.outputDir}/${config.projectName}',
+        ],
+        runInShell: true);
     stdout.write(result.stdout);
     stderr.write(result.stderr);
 
@@ -379,10 +382,13 @@ class FlutterCreateWizard {
     final check = await Process.run('flutter', ['--version'], runInShell: true);
     if (check.exitCode == 0) return 'flutter';
 
-    final fvmCheck = await Process.run('fvm', [
-      'flutter',
-      '--version',
-    ], runInShell: true);
+    final fvmCheck = await Process.run(
+        'fvm',
+        [
+          'flutter',
+          '--version',
+        ],
+        runInShell: true);
     if (fvmCheck.exitCode == 0) return 'fvm flutter';
 
     console.setForegroundColor(ConsoleColor.red);
