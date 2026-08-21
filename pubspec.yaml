@@ -29,7 +29,7 @@ dependencies:
 dev_dependencies:
   lints: ^6.1.0
   test: ^1.31.2
-  dart_husky: ^1.7.0
+  dart_husky: ^1.8.0
 
 executables:
   flutter_createx: main
