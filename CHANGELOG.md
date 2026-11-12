@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.3](https://github.com/moulibheemaneti/flutter_createx/compare/flutter_createx-v1.4.2...flutter_createx-v1.4.3) (2026-11-12)
+
+
+### Miscellaneous
+
+* **deps:** upgrade flutter to 3.50.0 and all packages ([#20](https://github.com/moulibheemaneti/flutter_createx/issues/20)) ([a73497c](https://github.com/moulibheemaneti/flutter_createx/commit/a73497c765eceb6b4878bb9d78bd6df598b5b556))
+
 ## [1.4.2](https://github.com/moulibheemaneti/flutter_createx/compare/flutter_createx-v1.4.1...flutter_createx-v1.4.2) (2026-10-20)
 
 
